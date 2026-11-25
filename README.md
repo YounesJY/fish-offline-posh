@@ -141,11 +141,12 @@ so minimal images such as `opensuse/tumbleweed` work as-is.
 
 ## Testing
 
-Two scripts cover the project. Both leave your real config alone.
+Three scripts cover the project. All leave your real config alone.
 
 ```bash
 ./tests/local-test.sh   # throwaway HOME, needs fish + oh-my-posh, no network
 ./tests/run.sh          # fresh containers, needs Docker or podman
+./tests/try.sh IMAGE    # interactive container with the repo at /repo
 ```
 
 `local-test.sh` installs into a temporary directory, checks theme listing,
@@ -169,9 +170,9 @@ Covered images:
 - `opensuse/tumbleweed`
 
 Each test installs fish, Oh My Posh, and the themes, switches themes, checks
-persistence, and uninstalls the managed files. The Alpine and openSUSE images
-do not ship bash, so the installer's POSIX preamble installs it with `apk`
-before re-executing itself. All six images pass.
+persistence, and uninstalls the managed files. Alpine does not ship bash, so
+the installer's POSIX preamble installs it with `apk` before re-executing
+itself. All six images pass.
 
 See [docs/TESTING.md](docs/TESTING.md) for the interactive sandbox, the binary
 download test, and failure diagnosis.

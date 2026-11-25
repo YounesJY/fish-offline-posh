@@ -25,6 +25,7 @@ taking over the user's config. Four constraints shape the code:
 | `tests/local-test.sh` | Fast sandbox test; needs fish and an existing oh-my-posh |
 | `tests/container-test.sh` | Assertions that run inside a fresh container |
 | `tests/run.sh` | Docker/podman matrix for six distros |
+| `tests/try.sh` | Starts an interactive container with the repo at `/repo` |
 | `README.md` | User-facing install, usage, uninstall |
 | `docs/TESTING.md` | Test recipes and failure diagnosis |
 
@@ -87,8 +88,7 @@ These prevent failures that are easy to miss in review.
   `/etc/ssl/certs/ca-certificates.crt`; downloads fail with `curl: (77)`.
   `install_dependencies` installs `ca-certificates` when no common bundle
   exists.
-- **Missing bash.** Alpine and openSUSE images do not ship it. Keep the POSIX
-  preamble.
+- **Missing bash.** Alpine does not ship it. Keep the POSIX preamble.
 - **`fish -i` without `TERM`.** Containers print terminal warnings. They are
   noise, not failures.
 - **Bare theme names.** See invariant 1. Both `--set` and the conf.d must
@@ -106,6 +106,7 @@ fish -n fish/functions/chooseOhMyPosh.fish
 ./tests/local-test.sh          # fast, isolated HOME, no network
 ./tests/run.sh                 # six-distro matrix, needs Docker or podman
 ./tests/run.sh alpine:latest   # one image while iterating
+./tests/try.sh alpine:latest   # interactive container, repo mounted at /repo
 ```
 
 `tests/local-test.sh` needs `fish` and an existing `oh-my-posh` on `PATH`.

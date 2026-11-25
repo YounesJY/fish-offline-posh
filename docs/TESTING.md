@@ -68,6 +68,40 @@ Package installation belongs to the container matrix; running without
 `--no-deps` on your machine can install system packages and is not needed to
 test the picker.
 
+## Interactive container
+
+```bash
+./tests/try.sh ubuntu:24.04
+./tests/try.sh alpine:latest
+RUNTIME=podman ./tests/try.sh fedora:latest
+```
+
+The script mounts this repo read-only at `/repo`, starts a shell in that
+directory, and deletes the container when you exit. The installer writes only
+inside the container, so your host stays clean.
+
+Inside the container:
+
+```bash
+./install.sh
+fish
+chooseOhMyPosh
+```
+
+The installer detects the container and skips the Nerd Font. It still downloads
+Oh My Posh and installs fish and fzf, so the container needs network. Alpine
+starts in `/bin/sh` because it has no bash; `./install.sh` installs bash with
+`apk` and re-execs itself.
+
+The same thing without the helper:
+
+```bash
+docker run --rm -it -v "$PWD:/repo:ro" -w /repo ubuntu:24.04 bash
+```
+
+`podman run` accepts the same arguments. Drop `--rm` if you want to inspect the
+container after exit.
+
 ## Container matrix
 
 ```bash
