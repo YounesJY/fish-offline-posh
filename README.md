@@ -139,9 +139,19 @@ already present.
 Only standard POSIX tools plus bash are assumed. `findutils` is not required,
 so minimal images such as `opensuse/tumbleweed` work as-is.
 
-## Container tests
+## Testing
 
-The test harness runs the real installer in fresh containers:
+Two scripts cover the project. Both leave your real config alone.
+
+```bash
+./tests/local-test.sh   # throwaway HOME, needs fish + oh-my-posh, no network
+./tests/run.sh          # fresh containers, needs Docker or podman
+```
+
+`local-test.sh` installs into a temporary directory, checks theme listing,
+persistence, the startup path, and uninstall, then deletes everything.
+
+The container matrix runs the real installer in fresh images:
 
 ```bash
 ./tests/run.sh                         # all distros
@@ -162,6 +172,15 @@ Each test installs fish, Oh My Posh, and the themes, switches themes, checks
 persistence, and uninstalls the managed files. The Alpine and openSUSE images
 do not ship bash, so the installer's POSIX preamble installs it with `apk`
 before re-executing itself. All six images pass.
+
+See [docs/TESTING.md](docs/TESTING.md) for the interactive sandbox, the binary
+download test, and failure diagnosis.
+
+## Development
+
+[AGENTS.md](AGENTS.md) documents the repo layout, invariants, commands, and the
+container bugs that shaped the current code. Read it before changing
+`install.sh` or the fish files.
 
 ## Migration from `setup-fish-omp.sh`
 
